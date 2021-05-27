@@ -8,8 +8,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textColor="@color/button"
         android:text="Join Race"
-        android:layout_gravity="center"
         android:textSize="@dimen/_14ssp" />
     <EditText
         android:id="@+id/raceId_et"
@@ -31,9 +32,10 @@
         android:weightSum="4">
 
         <Button
-            android:id="@+id/btnnUpdate"
+            android:id="@+id/btnJoin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/button"
             android:layout_margin="@dimen/_10sdp"
             android:layout_weight="2"
             android:text="Join"
@@ -46,6 +48,7 @@
             android:layout_margin="@dimen/_10sdp"
             android:layout_weight="2"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/button"
             android:text="Cancel"
             android:layout_gravity="center"
             android:textColor="#fff" />

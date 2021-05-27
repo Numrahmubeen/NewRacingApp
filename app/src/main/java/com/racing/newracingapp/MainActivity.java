@@ -37,17 +37,13 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
 
     private static final int RC_LOCATION_REQUEST = 1234;
-    private int RC_LOCATION_ON_REQUEST = 1235;
- //   private Button go_bt;
     private FloatingActionButton initRace_fab, joinRace_fab;
     private AlertDialog alertDialog;
-    //private  DatabaseReference dbRefRaceId;
     private List<String> raceIdList;
-    private String myRaceId;
     private DatabaseReference dbRefUser;
     private RecyclerView race_rv;
     private String userId;
-    private List<String> useRaceList;
+    private List<RaceModel> useRaceList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +51,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         userId = Settings.System.getString(MainActivity.this.getContentResolver(), Settings.Secure.ANDROID_ID);
 
-
-     //   go_bt = findViewById(R.id.go);
         initRace_fab = findViewById(R.id.initiateRace_fab);
         joinRace_fab = findViewById(R.id.joinRace_fab);
         race_rv = findViewById(R.id.race_rv);
-
 
         race_rv.setLayoutManager(new LinearLayoutManager(this,RecyclerView.VERTICAL,false));
         race_rv.setHasFixedSize(true);
@@ -78,8 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 useRaceList = new ArrayList<>();
                 for(DataSnapshot ds:snapshot.child(userId).getChildren())
                 {
-                    useRaceList.add(ds.getKey());
-
+                    useRaceList.add(new RaceModel(ds.getValue(String.class),ds.getKey()));
                 }
                 RaceAdapter raceAdapter = new RaceAdapter(useRaceList,MainActivity.this);
                 race_rv.setAdapter(raceAdapter);
@@ -93,13 +85,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void buttonClickFunctions() {
-//        go_bt.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent i=new Intent(MainActivity.this,MapsActivity.class);
-//                startActivity(i);
-//            }
-//        });
         initRace_fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,28 +101,37 @@ public class MainActivity extends AppCompatActivity {
 
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.
                             this);
-                    Button ok_bt = (Button) alertView.findViewById(R.id.alert_createRoom_bt);
+                    Button ok_bt = (Button) alertView.findViewById(R.id.alert_startRace_bt);
+                    EditText raceId_et = alertView.findViewById(R.id.raceId_et);
+                    EditText raceTitle_et = alertView.findViewById(R.id.raceTitle_et);
                     Button cancel_bt = (Button) alertView.findViewById(R.id.cancel_bt);
 
                     ok_bt.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("myRacingApp");
-                            final String raceId = ref.push().getKey();
-                         //   dbRefRaceId = FirebaseDatabase.getInstance().getReference().child("myRacingApp").child(raceId);
-                            Intent i = new Intent(MainActivity.this, LocationTrackerService.class);
-                            i.putExtra("raceId",raceId);
-//                            dbRefRaceId.child("raceId").setValue(raceId);
-                            dbRefUser.child(userId).child(raceId).setValue(raceId);
-                            startService(i);
-                            alertDialog.dismiss();
+                            String raceTitle = raceTitle_et.getText().toString();
 
+                            if (!raceTitle.equals("")){
+                                DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("myRacingApp");
+                                final String raceId = ref.push().getKey();
+                                Intent i = new Intent(MainActivity.this, LocationTrackerService.class);
+                                i.putExtra("raceId",raceId);
+                                dbRefUser.child(userId).child(raceId).setValue(raceTitle);
+                                startService(i);
+                                alertDialog.dismiss();
+                                finish();
+                                startActivity(getIntent());
+                            }
+                            else {
+                                Toast.makeText(MainActivity.this, "Please Enter Title", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     });
                     cancel_bt.setOnClickListener(view -> alertDialog.dismiss());
                     alertDialogBuilder.setView(alertView);
                     alertDialog = alertDialogBuilder.create();
                     alertDialog.show();
+
                 }
             }
         });
@@ -151,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(MainActivity.
                         this);
                 final EditText raceId_et = (EditText) alertView.findViewById(R.id.raceId_et);
-                Button okButton = (Button) alertView.findViewById(R.id.btnnUpdate);
+                Button okButton = (Button) alertView.findViewById(R.id.btnJoin);
                 Button cancelButton = (Button) alertView.findViewById(R.id.btncancel);
 
                 okButton.setOnClickListener(new View.OnClickListener() {
@@ -171,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 raceIdList = new ArrayList<>();
+
                                 for (DataSnapshot ds : snapshot.getChildren()) {
                                     raceIdList.add(ds.getKey());
                                 }

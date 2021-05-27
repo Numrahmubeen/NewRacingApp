@@ -10,4 +10,8 @@
 
     <color name="pipeline">#7b7b7b</color>
     <color name="path">#000</color>
+    <color name="secondary_text_color">#757575</color>
+    <color name="bg">#9C27B0</color>
+    <color name="button">#00BCD4</color>
+    <color name="primary">#9C27B0</color>
 </resources>

@@ -50,7 +50,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private static final String TAG = " hgvh";
     private GoogleMap mMap;
- //   private LatLng previousLatLng;
     private LatLng currentLatLng;
     private Polyline polyline1;
     private DatabaseReference dbRefDest;
@@ -76,9 +75,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         rceId = getIntent().getStringExtra("raceId");
         mapFragment.getMapAsync(this);
-
-
-
     }
 
     /**
@@ -96,7 +92,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         dbRefWin = FirebaseDatabase.getInstance().getReference().child("myRacingApp").child(rceId).child("members");
         mMap = googleMap;
         drawable = getResources().getDrawable(R.drawable.ic_marker);
-
 
         // Add a marker  and move the camera
         polyline1 = mMap.addPolyline(new PolylineOptions().addAll(polylinePoints));
@@ -144,9 +139,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     LatLng dest = (LatLng) markerPoints.get(1);
 
                     calculateDirections(origin,dest);
-
                 }
-
             }
             }
         });
@@ -157,38 +150,32 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         String id = Settings.System.getString(MapsActivity.this.getContentResolver(), Settings.Secure.ANDROID_ID);
         DatabaseReference ref = database.getReference().child("myRacingApp").child(rceId).child("members");
-        Toast.makeText(this, "this method clled", Toast.LENGTH_SHORT).show();
         GeoFire geoFire=new GeoFire(ref);
         geoFire.getLocation(id, new LocationCallback() {
             @Override
             public void onLocationResult(String key, GeoLocation location) {
                 if (location != null) {
-// save longitude and latitude to db
+
                     double latitude = 0, longitude = 0;
                     longitude = location.longitude;
                     latitude = location.latitude;
                     currentLatLng = new LatLng(latitude, longitude);
                     getUsersAround();
 
-//                    if(previousLatLng ==null || previousLatLng != currentLatLng){
-                        // add marker line
-                        if(mMap!=null) {
-                                          checkWin();
-             //               previousLatLng  = currentLatLng;
-                            polylinePoints.add(currentLatLng);
-                            polyline1.setPoints(polylinePoints);
-                            Log.w("tag", "Key:" + currentLatLng);
-                            if(mCurrLocationMarker!=null){
-                                mCurrLocationMarker.setPosition(currentLatLng);
-                            }else{
-                                mCurrLocationMarker = mMap.addMarker(new MarkerOptions()
-                                        .position(currentLatLng)
-                                        .icon(getMarkerIconFromDrawable(drawable))
-                                        .title("Crnt"));
-                            }
-                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 16));
-                  //      }
-
+                    if(mMap!=null) {
+                        checkWin();
+                        polylinePoints.add(currentLatLng);
+                        polyline1.setPoints(polylinePoints);
+                        Log.w("tag", "Key:" + currentLatLng);
+                        if(mCurrLocationMarker!=null){
+                            mCurrLocationMarker.setPosition(currentLatLng);
+                        }else{
+                            mCurrLocationMarker = mMap.addMarker(new MarkerOptions()
+                                    .position(currentLatLng)
+                                    .icon(getMarkerIconFromDrawable(drawable))
+                                    .title("Crnt"));
+                        }
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 16));
                     }
                 } else {
                     System.out.println(String.format("There is no location for key %s in GeoFire", key));
@@ -200,66 +187,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 System.err.println("There was an error getting the GeoFire location: " + databaseError);
             }
         });
-//        ref.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//
-//                Log.i("tag", "New location updated:" + dataSnapshot.getKey());
-//                updateMap(dataSnapshot);
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
     }
-
-//    private void updateMap(DataSnapshot dataSnapshot) {
-//        double latitude = 0, longitude = 0;
-//
-//        Iterable<DataSnapshot> data = dataSnapshot.child("I").getChildren();
-//        for(DataSnapshot d: data){
-//            if(d.getKey().equals("0")){
-//                latitude = (Double) d.getValue();
-//            }else if(d.getKey().equals("1")){
-//                longitude = (Double) d.getValue();
-//            }
-//        }
-//
-//        currentLatLng = new LatLng(latitude, longitude);
-//        Toast.makeText(this, latitude +"long is " + longitude, Toast.LENGTH_SHORT).show();
-//        getUsersAround();
-//
-//        if(previousLatLng ==null || previousLatLng != currentLatLng){
-//            // add marker line
-//            if(mMap!=null) {
-//  //              checkWin();
-//                previousLatLng  = currentLatLng;
-//                polylinePoints.add(currentLatLng);
-//                polyline1.setPoints(polylinePoints);
-//                Log.w("tag", "Key:" + currentLatLng);
-//                if(mCurrLocationMarker!=null){
-//                    mCurrLocationMarker.setPosition(currentLatLng);
-//                }else{
-//                    Drawable drawable = getResources().getDrawable(R.drawable.ic_marker);
-//                    mCurrLocationMarker = mMap.addMarker(new MarkerOptions()
-//                            .position(currentLatLng)
-//                            .icon(getMarkerIconFromDrawable(drawable))
-//                            .title("Destination"));
-//                }
-//                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 16));
-//            }
-//
-//        }
-//    }
 
     private void checkWin() {
         dbRefDest.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
 
                 Iterable<DataSnapshot> data = snapshot.getChildren();
                 for(DataSnapshot d: data){
@@ -275,36 +208,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 destLoc = new Location("");
                 destLoc.setLatitude(destLat);
                 destLoc.setLongitude(destLong);
-
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
-//        dbRefWin.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                for (DataSnapshot ds : snapshot.getChildren()) {
-//                    UserLoc userLoc = ds.getValue(UserLoc.class);
-//                    Location crntLoc = new Location("");
-//                    crntLoc.setLatitude(userLoc.getLatitude());
-//                    crntLoc.setLongitude(userLoc.getLongitude());
-//                    float distnce = crntLoc.distanceTo(destLoc);
-//                    if (distnce < 50 && winner.equals("none")){
-//                        dbRefDest.child("winner").setValue(userLoc.getUserId());
-//                        winner = userLoc.getUserId();
-//                        Toast.makeText(MapsActivity.this, userLoc.getUserId() +" won this Competition", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
 
         DatabaseReference membersLocation = FirebaseDatabase.getInstance().getReference().child("myRacingApp").child(rceId).child("members");
 
@@ -353,29 +262,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         });
-//
-//        dbRefWin.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                for (DataSnapshot ds : snapshot.getChildren()) {
-//                    UserLoc userLoc = ds.getValue(UserLoc.class);
-//                    Location crntLoc = new Location("");
-//                    crntLoc.setLatitude(userLoc.getLatitude());
-//                    crntLoc.setLongitude(userLoc.getLongitude());
-//                    float distnce = crntLoc.distanceTo(destLoc);
-//                    if (distnce < 50 && winner.equals("none")){
-//                        dbRefDest.child("winner").setValue(userLoc.getUserId());
-//                        winner = userLoc.getUserId();
-//                        Toast.makeText(MapsActivity.this, userLoc.getUserId() +" won this Competition", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
     }
 
     private BitmapDescriptor getMarkerIconFromDrawable(Drawable drawable) {
@@ -470,8 +356,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
     }
-
-
     List<Marker> markers = new ArrayList<Marker>();
     private void getUsersAround(){
 
@@ -496,8 +380,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mDriverMarker.setTitle(key);
 
                 markers.add(mDriverMarker);
-
-
             }
 
             @Override
