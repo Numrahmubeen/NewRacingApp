@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">NewRacingApp</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="channel_id">AIzaSyDJi0JPWtUO2-nXxz5xfImDT214c8tlC5A</string>
+    <string name="action_stop">stop</string>
+
+</resources>

@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "258591788511",
+    "firebase_url": "https://racing-project-f39aa-default-rtdb.firebaseio.com",
+    "project_id": "racing-project-f39aa",
+    "storage_bucket": "racing-project-f39aa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:258591788511:android:d029588e29928430a9c86a",
+        "android_client_info": {
+          "package_name": "com.racing.newracingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "258591788511-3a87p68bdomvg25egslqn4u2p10kep47.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJi0JPWtUO2-nXxz5xfImDT214c8tlC5A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "258591788511-3a87p68bdomvg25egslqn4u2p10kep47.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:258591788511:android:cf61a72a649dcc3aa9c86a",
+        "android_client_info": {
+          "package_name": "com.racing.racingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "258591788511-3a87p68bdomvg25egslqn4u2p10kep47.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJi0JPWtUO2-nXxz5xfImDT214c8tlC5A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "258591788511-3a87p68bdomvg25egslqn4u2p10kep47.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
